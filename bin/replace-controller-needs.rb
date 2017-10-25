@@ -4,18 +4,26 @@ file_name = ARGV[0]
 
 contents = File.read file_name
 
-controllers = []
-
-contents = contents.gsub(/[ \t]*needs: \[([^\]]+)\]/) do |match|
-  controllers.push *Regexp.last_match[1].gsub(/["']/, '').split(',').collect(&:strip)
-
+def replace_controllers(controllers)
   result = ''
-  tab = '	'
+  tab = '  '
   controllers.each do |controller|
     result << "#{tab}#{controller}: Ember.inject.controller()\n"
   end
 
   result
+end
+
+controllers = []
+
+contents = contents.gsub(/[ \t]*needs: \[([^\]]+)\]/) do |match|
+  controllers.push *Regexp.last_match[1].gsub(/["']/, '').split(',').collect(&:strip)
+  replace_controllers(controllers)
+end
+
+contents = contents.gsub(/[ \t]*needs: \'([^\']+\')/) do |match|
+  controllers.push Regexp.last_match[1].gsub(/["']/, '').strip
+  replace_controllers(controllers)
 end
 
 controllers.each do |controller|
