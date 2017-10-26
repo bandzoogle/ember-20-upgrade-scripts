@@ -25,6 +25,13 @@ contents = contents.gsub(/\{\{bind\-attr (#{IDENTIFIER})\s*=\s*\"([^\"]+)\"\}\}/
   %{#{attribute_name}="#{class_content}"}
 end
 
+contents = contents.gsub(/\{\{bind\-attr (#{IDENTIFIER})\s*=\s*([^\}]+)\}\}/) do |match|
+  attribute_name = Regexp.last_match[1]
+  class_content = Regexp.last_match[2]
+
+  "#{attribute_name}={{#{class_content}}}"
+end
+
 print contents
 
 exit 1
