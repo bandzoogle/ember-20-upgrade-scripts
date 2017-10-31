@@ -6,7 +6,7 @@ contents = File.read file_name
 
 IDENTIFIER = /[a-zA-Z\-\.]+/
 
-contents = contents.gsub(/\{\{#each (#{IDENTIFIER}) in (#{IDENTIFIER})/) do |match|
+contents = contents.gsub(/\{\{~?#each (#{IDENTIFIER}) in (#{IDENTIFIER})/) do |match|
   item = Regexp.last_match[1]
   collection = Regexp.last_match[2]
 
